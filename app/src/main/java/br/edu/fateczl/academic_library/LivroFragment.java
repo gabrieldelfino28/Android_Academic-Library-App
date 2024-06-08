@@ -20,6 +20,7 @@ import br.edu.fateczl.academic_library.control.LivroController;
 import br.edu.fateczl.academic_library.control.factory.ILivroFactory;
 import br.edu.fateczl.academic_library.model.Exemplar;
 import br.edu.fateczl.academic_library.model.Livro;
+import br.edu.fateczl.academic_library.persistence.LivroDAO;
 
 public class LivroFragment extends Fragment implements IFragOperations<Livro> {
     private View view;
@@ -37,8 +38,8 @@ public class LivroFragment extends Fragment implements IFragOperations<Livro> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_livro, container, false);
-        livroCont = new LivroController();
-        factory = new LivroController();
+        livroCont = new LivroController(new LivroDAO(view.getContext()));
+        factory = new LivroController(new LivroDAO(view.getContext()));
 
         inCodigoLivro = view.findViewById(R.id.inCodLivro);
         inNomeLivro = view.findViewById(R.id.inNomeLivro);
@@ -55,7 +56,11 @@ public class LivroFragment extends Fragment implements IFragOperations<Livro> {
         btnList = view.findViewById(R.id.btnListLivro);
         btnGet = view.findViewById(R.id.btnBuscarLivro);
 
+        btnInsert.setOnClickListener(op -> operacaoInserir());
+        btnUpdate.setOnClickListener(op -> operacaoAtualizar());
+        btnDelete.setOnClickListener(op -> operacaoDeletar());
         btnList.setOnClickListener(op -> operacaoListar());
+        btnGet.setOnClickListener(op -> operacaoBuscar());
 
         return view;
     }
@@ -89,7 +94,7 @@ public class LivroFragment extends Fragment implements IFragOperations<Livro> {
     @Override
     public void operacaoDeletar() {
         try {
-            checkFields();
+            if (inCodigoLivro.getText().toString().isEmpty()) throw new Exception("Codigo Vazio!");
             Livro livro = mountObject();
             livroCont.remover(livro);
             Toast.makeText(view.getContext(), getString(R.string.deleteM), Toast.LENGTH_LONG).show();
@@ -105,9 +110,8 @@ public class LivroFragment extends Fragment implements IFragOperations<Livro> {
             if (inCodigoLivro.getText().toString().isEmpty()) throw new Exception("Codigo Vazio!");
             Livro livro = mountObject();
             livro = livroCont.buscar(livro);
-            if (isFound()) {
-                fillFields(livro);
-            } else {
+            fillFields(livro);
+            if (notFound()) {
                 cleanFields();
                 throw new Exception(String.format(getString(R.string.findErr), "Livro"));
             }
@@ -128,6 +132,7 @@ public class LivroFragment extends Fragment implements IFragOperations<Livro> {
         } catch (Exception err) {
             Toast.makeText(view.getContext(), err.getMessage(), Toast.LENGTH_LONG).show();
         }
+        cleanFields();
     }
 
     @Override
@@ -161,22 +166,24 @@ public class LivroFragment extends Fragment implements IFragOperations<Livro> {
     public Livro mountObject() {
         int codLivro = Integer.parseInt(inCodigoLivro.getText().toString());
         String nome = inNomeLivro.getText().toString();
-        int qtdPag = Integer.parseInt(inQtdPagLivro.getText().toString());
         String ISBN = inISBNLivro.getText().toString();
-        int edicao = Integer.parseInt(inCodigoLivro.getText().toString());
-
+        int qtdPag;
+        int edicao;
+        if (!inQtdPagLivro.getText().toString().isEmpty())
+             qtdPag = Integer.parseInt(inQtdPagLivro.getText().toString());
+        else qtdPag = 0;
+        if (!inEdicaoLivro.getText().toString().isEmpty())
+             edicao = Integer.parseInt(inEdicaoLivro.getText().toString());
+        else edicao = 0;
         Exemplar exemplar = factory.ExemplarFactory(codLivro, nome, qtdPag);
         return factory.LivroFactory(exemplar, ISBN, edicao);
     }
 
     @Override
-    public boolean isFound() {
-        if (inNomeLivro.getText().toString().isEmpty()
-        && inQtdPagLivro.getText().toString().isEmpty()
-        && inISBNLivro.getText().toString().isEmpty()
-        && inEdicaoLivro.getText().toString().isEmpty()) {
-            return false;
-        }
-        return true;
+    public boolean notFound() {
+        return  inNomeLivro.getText().toString().isEmpty() &&
+                inQtdPagLivro.getText().toString().isEmpty() &&
+                inISBNLivro.getText().toString().isEmpty() &&
+                inEdicaoLivro.getText().toString().isEmpty();
     }
 }

@@ -49,7 +49,7 @@ public class Aluguel {
     @NonNull
     @Override
     public String toString() {
-        return "#" + aluno.getRA() + " - " + aluno.getNome() + " - " + exemplar.getNome() +
+        return "#" + aluno.getRA() + " - " + aluno.getNome() + " - #" + exemplar.getCodigo() + ", " + exemplar.getNome() +
                 " - " + dataRetirada + " - " + dataDevolucao;
     }
 }

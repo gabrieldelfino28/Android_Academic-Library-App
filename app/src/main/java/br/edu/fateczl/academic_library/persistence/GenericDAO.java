@@ -23,7 +23,8 @@ public class GenericDAO extends SQLiteOpenHelper {
     private final static String CREATE_TABLE_LIVRO =
             "CREATE TABLE Livro( " +
                     "codigo NUMERIC(10) UNIQUE, " +
-                    "issn varchar(40), " +
+                    "isbn varchar(40), " +
+                    "edicao integer(10), " +
                     "PRIMARY KEY(codigo), " +
                     "FOREIGN KEY(codigo) REFERENCES EXEMPLAR(codigo) " +
                     ");";
@@ -39,7 +40,7 @@ public class GenericDAO extends SQLiteOpenHelper {
     private final static String CREATE_ALUGUEL =
             "CREATE TABLE Aluguel( " +
                     "codigo NUMERIC(10) UNIQUE NOT NULL, " +
-                    "ra NUMERIC(14) UNIQUE NOT NULL, " +
+                    "ra NUMERIC(10) UNIQUE NOT NULL, " +
                     "data_retirada VARCHAR(30) NOT NULL, " +
                     "data_devolucao VARCHAR(30), " +
                     "PRIMARY KEY(codigo, ra, data_retirada), " +

@@ -20,6 +20,7 @@ import br.edu.fateczl.academic_library.control.AlunoController;
 import br.edu.fateczl.academic_library.control.IController;
 import br.edu.fateczl.academic_library.control.factory.IAlunoFactory;
 import br.edu.fateczl.academic_library.model.Aluno;
+import br.edu.fateczl.academic_library.persistence.AlunoDAO;
 
 
 public class AlunoFragment extends Fragment implements IFragOperations<Aluno> {
@@ -39,8 +40,8 @@ public class AlunoFragment extends Fragment implements IFragOperations<Aluno> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_aluno, container, false);
-        alunoC = new AlunoController();
-        factory = new AlunoController();
+        alunoC = new AlunoController(new AlunoDAO(view.getContext()));
+        factory = new AlunoController(new AlunoDAO(view.getContext()));
 
         inCodigoAluno = view.findViewById(R.id.inCodAluno);
         inNomeAluno = view.findViewById(R.id.inNomeAluno);
@@ -55,7 +56,11 @@ public class AlunoFragment extends Fragment implements IFragOperations<Aluno> {
         btnList = view.findViewById(R.id.btnListAluno);
         btnGet = view.findViewById(R.id.btnBuscarAluno);
 
-
+        btnInsert.setOnClickListener(op -> operacaoInserir());
+        btnUpdate.setOnClickListener(op -> operacaoAtualizar());
+        btnDelete.setOnClickListener(op -> operacaoDeletar());
+        btnList.setOnClickListener(op -> operacaoListar());
+        btnGet.setOnClickListener(op -> operacaoBuscar());
         return view;
     }
 
@@ -85,7 +90,7 @@ public class AlunoFragment extends Fragment implements IFragOperations<Aluno> {
 
     public void operacaoDeletar() {
         try {
-            checkFields();
+            if (inCodigoAluno.getText().toString().isEmpty()) throw new Exception("Código Vazio!");
             Aluno aluno = mountObject();
             alunoC.remover(aluno);
             Toast.makeText(view.getContext(), getString(R.string.deleteM), Toast.LENGTH_LONG).show();
@@ -100,9 +105,8 @@ public class AlunoFragment extends Fragment implements IFragOperations<Aluno> {
             if (inCodigoAluno.getText().toString().isEmpty()) throw new Exception("Código Vazio!");
             Aluno aluno = mountObject();
             aluno = alunoC.buscar(aluno);
-            if (isFound()) {
-                fillFields(aluno);
-            } else {
+            fillFields(aluno);
+            if (notFound()) {
                 cleanFields();
                 throw new Exception(String.format(getString(R.string.findErr), "Aluno"));
             }
@@ -122,6 +126,7 @@ public class AlunoFragment extends Fragment implements IFragOperations<Aluno> {
         } catch (Exception err) {
             Toast.makeText(view.getContext(), err.getMessage(), Toast.LENGTH_LONG).show();
         }
+        cleanFields();
     }
 
     @Override
@@ -154,7 +159,7 @@ public class AlunoFragment extends Fragment implements IFragOperations<Aluno> {
     }
 
     @Override
-    public boolean isFound() {
-        return !(inNomeAluno.getText().toString().isEmpty() && inEmailAluno.getText().toString().isEmpty());
+    public boolean notFound() {
+        return (inNomeAluno.getText().toString().isEmpty() && inEmailAluno.getText().toString().isEmpty());
     }
 }

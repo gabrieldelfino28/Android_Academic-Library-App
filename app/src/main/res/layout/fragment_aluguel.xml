@@ -21,15 +21,15 @@
 
     <TextView
         android:id="@+id/tvListarAluguel"
-        android:layout_width="310dp"
-        android:layout_height="75dp"
+        android:layout_width="323dp"
+        android:layout_height="125dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.42"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.94" />
+        app:layout_constraintVertical_bias="0.815" />
 
     <EditText
         android:id="@+id/inDataRetAluguel"
@@ -43,7 +43,7 @@
         android:inputType="date"
         android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintHorizontal_bias="0.135"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvFragAluguel" />
 
@@ -51,11 +51,13 @@
         android:id="@+id/tvFragAluguel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:layout_marginBottom="90dp"
         android:text="@string/aluguel"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/inDataDevAluguel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,18 +88,18 @@
 
     <EditText
         android:id="@+id/inDataDevAluguel"
-        android:layout_width="0dp"
+        android:layout_width="324dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="152dp"
         android:ems="10"
         android:hint="@string/data_dev"
         android:importantForAutofill="no"
         android:inputType="date"
         android:textColorHint="#000000"
-        app:layout_constraintEnd_toEndOf="@+id/btnDeleteAluguel"
+        app:layout_constraintEnd_toEndOf="@+id/spExemplar"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/btnInsertAluguel"
-        app:layout_constraintTop_toBottomOf="@+id/inCodExemplar" />
+        app:layout_constraintStart_toStartOf="@+id/inDataRetAluguel"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnBuscarAluguel"
@@ -121,41 +123,11 @@
         app:layout_constraintStart_toEndOf="@+id/btnUpdateAluguel"
         app:layout_constraintTop_toBottomOf="@+id/inDataDevAluguel" />
 
-    <EditText
-        android:id="@+id/inRA"
-        android:layout_width="325dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="@string/ra_aluno"
-        android:importantForAutofill="no"
-        android:inputType="number"
-        android:textColorHint="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.43"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inCodExemplar" />
-
-    <EditText
-        android:id="@+id/inCodExemplar"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="@string/cod_exemplar"
-        android:importantForAutofill="no"
-        android:inputType="number"
-        android:textColorHint="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/inDataDevAluguel"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/inDataDevAluguel"
-        app:layout_constraintTop_toBottomOf="@+id/inDataRetAluguel" />
-
     <Spinner
         android:id="@+id/spExemplar"
         android:layout_width="325dp"
         android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="@+id/spAluno"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/spAluno"

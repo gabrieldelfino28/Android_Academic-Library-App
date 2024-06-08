@@ -20,8 +20,9 @@ import br.edu.fateczl.academic_library.control.RevistaController;
 import br.edu.fateczl.academic_library.control.factory.IRevistaFactory;
 import br.edu.fateczl.academic_library.model.Exemplar;
 import br.edu.fateczl.academic_library.model.Revista;
+import br.edu.fateczl.academic_library.persistence.RevistaDAO;
 
-public class RevistaFragment extends Fragment implements IFragOperations<Revista>{
+public class RevistaFragment extends Fragment implements IFragOperations<Revista> {
 
     private View view;
     private EditText inCodigoRevista, inNomeRevista, inQtdPagRevista, inISSNRevista;
@@ -37,8 +38,8 @@ public class RevistaFragment extends Fragment implements IFragOperations<Revista
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_revista, container, false);
-        revistaCont =  new RevistaController();
-        factory = new RevistaController();
+        revistaCont = new RevistaController(new RevistaDAO(view.getContext()));
+        factory = new RevistaController(new RevistaDAO(view.getContext()));
 
         inCodigoRevista = view.findViewById(R.id.inCodRevista);
         inNomeRevista = view.findViewById(R.id.inNomeRevista);
@@ -53,6 +54,12 @@ public class RevistaFragment extends Fragment implements IFragOperations<Revista
         btnDelete = view.findViewById(R.id.btnDeleteRevista);
         btnList = view.findViewById(R.id.btnListRevista);
         btnGet = view.findViewById(R.id.btnBuscarRevista);
+
+        btnInsert.setOnClickListener(op -> operacaoInserir());
+        btnUpdate.setOnClickListener(op -> operacaoAtualizar());
+        btnDelete.setOnClickListener(op -> operacaoDeletar());
+        btnList.setOnClickListener(op -> operacaoListar());
+        btnGet.setOnClickListener(op -> operacaoBuscar());
 
         return view;
     }
@@ -75,7 +82,7 @@ public class RevistaFragment extends Fragment implements IFragOperations<Revista
         try {
             checkFields();
             Revista revista = mountObject();
-            revistaCont.inserir(revista);
+            revistaCont.atualizar(revista);
             Toast.makeText(view.getContext(), getString(R.string.updateM), Toast.LENGTH_LONG).show();
         } catch (Exception err) {
             Toast.makeText(view.getContext(), err.getMessage(), Toast.LENGTH_LONG).show();
@@ -86,9 +93,9 @@ public class RevistaFragment extends Fragment implements IFragOperations<Revista
     @Override
     public void operacaoDeletar() {
         try {
-            checkFields();
+            if (inCodigoRevista.getText().toString().isEmpty()) throw new Exception("Codigo Vazio!");
             Revista revista = mountObject();
-            revistaCont.inserir(revista);
+            revistaCont.remover(revista);
             Toast.makeText(view.getContext(), getString(R.string.deleteM), Toast.LENGTH_LONG).show();
         } catch (Exception err) {
             Toast.makeText(view.getContext(), err.getMessage(), Toast.LENGTH_LONG).show();
@@ -102,9 +109,8 @@ public class RevistaFragment extends Fragment implements IFragOperations<Revista
             if (inCodigoRevista.getText().toString().isEmpty()) throw new Exception("Codigo Vazio!");
             Revista revista = mountObject();
             revista = revistaCont.buscar(revista);
-            if (isFound()) {
-                fillFields(revista);
-            } else {
+            fillFields(revista);
+            if (notFound()) {
                 cleanFields();
                 throw new Exception(String.format(getString(R.string.findErr), "Revista"));
             }
@@ -153,22 +159,24 @@ public class RevistaFragment extends Fragment implements IFragOperations<Revista
 
     @Override
     public Revista mountObject() {
-        int codRevista = Integer.parseInt(inCodigoRevista.getText().toString());
         String nome = inNomeRevista.getText().toString();
-        int qtdPag = Integer.parseInt(inQtdPagRevista.getText().toString());
         String ISSN = inISSNRevista.getText().toString();
-
+        int codRevista;
+        int qtdPag;
+        if (!inCodigoRevista.getText().toString().isEmpty())
+             codRevista = Integer.parseInt(inCodigoRevista.getText().toString());
+        else codRevista = 0;
+        if (!inQtdPagRevista.getText().toString().isEmpty())
+             qtdPag = Integer.parseInt(inQtdPagRevista.getText().toString());
+        else qtdPag = 0;
         Exemplar exemplar = factory.ExemplarFactory(codRevista, nome, qtdPag);
         return factory.RevistaFactory(exemplar, ISSN);
     }
 
     @Override
-    public boolean isFound() {
-        if (inNomeRevista.getText().toString().isEmpty()
-                && inQtdPagRevista.getText().toString().isEmpty()
-                && inISSNRevista.getText().toString().isEmpty()) {
-            return false;
-        }
-        return true;
+    public boolean notFound() {
+        return  inNomeRevista.getText().toString().isEmpty() &&
+                inQtdPagRevista.getText().toString().isEmpty() &&
+                inISSNRevista.getText().toString().isEmpty();
     }
 }

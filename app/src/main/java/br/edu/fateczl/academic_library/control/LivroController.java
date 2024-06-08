@@ -6,8 +6,15 @@ import java.util.List;
 import br.edu.fateczl.academic_library.control.factory.ILivroFactory;
 import br.edu.fateczl.academic_library.model.Exemplar;
 import br.edu.fateczl.academic_library.model.Livro;
+import br.edu.fateczl.academic_library.persistence.LivroDAO;
 
 public class LivroController implements ILivroFactory, IController<Livro> {
+
+    private final LivroDAO lDAO;
+
+    public LivroController(LivroDAO lDAO) {
+        this.lDAO = lDAO;
+    }
     @Override
     public Exemplar ExemplarFactory(int codExemplar, String nome, int qtdPag) {
         Exemplar ex = new Livro();
@@ -30,26 +37,48 @@ public class LivroController implements ILivroFactory, IController<Livro> {
 
     @Override
     public void inserir(Livro livro) throws SQLException {
-
+        if (lDAO.open() != null) {
+            lDAO.open();
+        }
+        lDAO.insert(livro);
+        lDAO.close();
     }
 
     @Override
     public void atualizar(Livro livro) throws SQLException {
-
+        if (lDAO.open() != null) {
+            lDAO.open();
+        }
+        lDAO.update(livro);
+        lDAO.close();
     }
 
     @Override
     public void remover(Livro livro) throws SQLException {
-
+        if (lDAO.open() != null) {
+            lDAO.open();
+        }
+        lDAO.delete(livro);
+        lDAO.close();
     }
 
     @Override
     public Livro buscar(Livro livro) throws SQLException {
-        return null;
+        if (lDAO.open() != null) {
+            lDAO.open();
+        }
+        Livro l = lDAO.findOne(livro);
+        lDAO.close();
+        return l;
     }
 
     @Override
     public List<Livro> listar() throws SQLException {
-        return null;
+        if (lDAO.open() != null) {
+            lDAO.open();
+        }
+        List<Livro> livros = lDAO.findAll();
+        lDAO.close();
+        return livros;
     }
 }

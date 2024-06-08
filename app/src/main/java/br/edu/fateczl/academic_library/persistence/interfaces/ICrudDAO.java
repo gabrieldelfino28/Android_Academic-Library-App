@@ -1,4 +1,4 @@
-package br.edu.fateczl.academic_library.persistence;
+package br.edu.fateczl.academic_library.persistence.interfaces;
 
 import java.sql.SQLException;
 import java.util.List;

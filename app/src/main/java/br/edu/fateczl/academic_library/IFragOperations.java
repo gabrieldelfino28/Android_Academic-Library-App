@@ -19,5 +19,5 @@ public interface IFragOperations<T> {
 
     T mountObject();
 
-    boolean isFound();
+    boolean notFound();
 }
