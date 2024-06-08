@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Academic Library App</string>
+    <string name="welcome">Bem Vindo, Estudante!</string>
+    <string name="home">Home</string>
+    <string name="livro">Livro</string>
+    <string name="revista">Revista</string>
+    <string name="aluno">Aluno</string>
+    <string name="aluguel">Aluguel</string>
+    <!--TODO#Fields -->
+    <string name="nome">Nome</string>
+    <string name="codigo">Código</string>
+    <string name="email">E-mail</string>
+    <string name="qtd_pag">Qtd. Páginas</string>
+    <string name="isbn">ISBN</string>
+    <string name="issn">ISSN</string>
+    <string name="edicao">Edição</string>
+    <string name="dat_ret">Data Retirada</string>
+    <string name="data_dev">Data Devolução</string>
+    <string name="ra_aluno">RA Aluno</string>
+    <string name="cod_exemplar">Código Exemplar</string>
+    <!--TODO#Buttons -->
+    <string name="btnBuscar">Buscar</string>
+    <string name="btnInsert">Inserir</string>
+    <string name="btnUpdate">Atualizar</string>
+    <string name="btnDelete">Excluir</string>
+    <string name="btnListAll">Listar</string>
+    <!--TODO#Msgs-->
+    <string name="insertM">Cadastro Bem Sucedido!</string>
+    <string name="updateM">Atualização Bem Sucedida!</string>
+    <string name="deleteM">Exclusão Bem Sucedida!</string>
+    <string name="findErr">%s Não Encontrado!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
